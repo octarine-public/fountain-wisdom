@@ -112,10 +112,6 @@ export class FountainModel {
 		return name === "particles/base_static/experience_shrine_ambient_endcap.vpcf"
 	}
 	private setFlagsByModifier(modifier: Modifier) {
-		const caster = modifier.Caster
-		if (caster === undefined) {
-			return
-		}
 		this.isActive = modifier.StackCount === 1
 		if (modifier.NetworkDamage === 0) {
 			this.lastGatherTime = 0
