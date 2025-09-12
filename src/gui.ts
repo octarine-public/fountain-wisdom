@@ -99,20 +99,6 @@ export class GUI {
 			RendererSDK.OutlinedCircle(wavePos, waveSize, waveColor, width)
 		}
 	}
-	protected DrawOnWorld(origin: Vector3, remaining: number) {
-		if (remaining === 0) {
-			return
-		}
-		const offset = 300
-		const w2s = RendererSDK.WorldToScreen(origin.Clone().AddScalarZ(offset))
-		if (w2s === undefined) {
-			return
-		}
-		const size = GUIInfo.ScaleVector(40, 40)
-		this.DrawIconWorld(
-			new Rectangle(w2s.Subtract(size.DivideScalar(2)), w2s.Add(size))
-		)
-	}
 	protected DrawIconWorld(position: Rectangle) {
 		RendererSDK.Image(
 			PathData.ImagePath + "/hud/timer/widsom_rune_png.vtex_c",
