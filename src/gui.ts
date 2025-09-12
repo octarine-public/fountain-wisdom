@@ -3,7 +3,6 @@ import {
 	GameState,
 	GUIInfo,
 	MathSDK,
-	Menu,
 	MinimapSDK,
 	PathData,
 	Rectangle,
@@ -43,7 +42,7 @@ export class GUI {
 		this.DrawIconWorld(rect)
 		this.DrawOutlineMode(rect, width, isCircle, outlinedColor)
 		this.DrawArc(rect, width, isGather ? -ratio : ratio, isCircle)
-		this.DrawTimer(remaining, rect, isActive)
+		this.DrawTimer(remaining, rect)
 	}
 	public DrawOnMinimap(
 		origin: Vector3,
@@ -108,16 +107,7 @@ export class GUI {
 	protected DrawBackground(position: Rectangle, isCircle: boolean) {
 		RendererSDK.Image(GUI.background, position.pos1, isCircle ? 0 : -1, position.Size)
 	}
-	protected DrawTimer(
-		remainingTime: number,
-		rect: Rectangle,
-		isActive: boolean = false
-	) {
-		if (isActive && remainingTime === 0) {
-			const ready = Menu.Localization.Localize("Ready")
-			const divde = Menu.Localization.SelectedUnitName === "russian" ? 5 : 4
-			RendererSDK.TextByFlags(ready, rect, Color.White, divde)
-		}
+	protected DrawTimer(remainingTime: number, rect: Rectangle) {
 		if (remainingTime === 0) {
 			return
 		}
