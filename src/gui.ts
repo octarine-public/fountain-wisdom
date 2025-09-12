@@ -3,6 +3,7 @@ import {
 	GameState,
 	GUIInfo,
 	MathSDK,
+	Menu,
 	MinimapSDK,
 	PathData,
 	Rectangle,
@@ -113,7 +114,8 @@ export class GUI {
 		isActive: boolean = false
 	) {
 		if (isActive && remainingTime === 0) {
-			RendererSDK.TextByFlags("Ready", rect, Color.White, 4)
+			const ready = Menu.Localization.Localize("Ready")
+			RendererSDK.TextByFlags(ready, rect, Color.White, 4)
 		}
 		if (remainingTime === 0) {
 			return
