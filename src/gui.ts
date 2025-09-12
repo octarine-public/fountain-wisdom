@@ -115,7 +115,8 @@ export class GUI {
 	) {
 		if (isActive && remainingTime === 0) {
 			const ready = Menu.Localization.Localize("Ready")
-			RendererSDK.TextByFlags(ready, rect, Color.White, 4)
+			const divde = Menu.Localization.SelectedUnitName === "russian" ? 5 : 4
+			RendererSDK.TextByFlags(ready, rect, Color.White, divde)
 		}
 		if (remainingTime === 0) {
 			return
