@@ -1,6 +1,5 @@
 import {
 	Color,
-	ConVarsSDK,
 	GameData,
 	GameRules,
 	GameState,
@@ -29,12 +28,7 @@ export class FountainModel {
 		return MenuManager.Menu
 	}
 	private get maxDuration() {
-		return this.isGather
-			? this.gatherMaxDuration
-			: ConVarsSDK.GetFloat(
-					"dota_xp_fountain_activation_interval",
-					GameData.Runes.XPSpawnEverySeconds
-				)
+		return this.isGather ? this.gatherMaxDuration : GameData.Runes.XPSpawnEverySeconds
 	}
 	private get isGather() {
 		return this.pickupRemaining !== 0
@@ -117,9 +111,9 @@ export class FountainModel {
 	private isEndcap(name: string) {
 		return name === "particles/base_static/experience_shrine_ambient_endcap.vpcf"
 	}
-	private setFlagsByModifier(modifier: Modifier, destroy = false) {
+	private setFlagsByModifier(modifier: Modifier) {
 		const caster = modifier.Caster
-		if (caster === undefined || destroy) {
+		if (caster === undefined) {
 			return
 		}
 		this.isActive = modifier.StackCount === 1
