@@ -57,7 +57,7 @@ new (class CFountainWisdom {
 			this.entities[i].Draw()
 		}
 	}
-	public PostDataUpdate(dt: number) {
+	protected PostDataUpdate(dt: number) {
 		if (dt === 0 || this.isPostGame) {
 			return
 		}

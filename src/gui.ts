@@ -18,68 +18,65 @@ export class GUI {
 	private static readonly background =
 		this.basePath + "/scripts_files/images/background.png"
 
-	private get menu() {
-		return MenuManager.Menu
-	}
-	private get iconSize() {
-		return this.menu.IconSize.value + 44
-	}
 	public DrawWorld(
 		origin: Vector3,
 		isGather: boolean,
 		isActive: boolean,
 		remaining: number,
-		maxRespawnTime: number
+		maxRespawnTime: number,
+		menu: MenuManager
 	) {
-		const offset = isActive ? 300 : 0
-		const w2s = RendererSDK.WorldToScreen(origin.Clone().AddScalarZ(offset))
+		if (isActive) {
+			origin = origin.Clone().AddScalarZ(300)
+		}
+		const w2s = RendererSDK.WorldToScreen(origin)
 		if (w2s === undefined || this.isHUDContains(w2s)) {
 			return
 		}
-		const rect = this.GetPosition(w2s)
-
-		const isCircle = this.menu.ModeImage.SelectedID === 0
-		const ratio = Math.max(100 * (remaining / maxRespawnTime), 0)
-		const width = Math.round(GUIInfo.ScaleHeight(2) + Math.round(rect.Height / 15))
-		const outlinedColor = remaining === 0 && isActive ? Color.Green : Color.Black
-
-		RendererSDK.Image(GUI.background, rect.pos1, isCircle ? 0 : -1, rect.Size)
-
+		const rect = this.GetPosition(w2s, menu),
+			isCircle = menu.ModeImage.SelectedID === 0,
+			ratio = Math.max(100 * (remaining / maxRespawnTime), 0),
+			width = Math.round(GUIInfo.ScaleHeight(2) + Math.round(rect.Height / 15)),
+			outlinedColor = isActive && remaining === 0 ? Color.Green : Color.Black
+		this.DrawBackground(rect, isCircle)
 		this.DrawIconWorld(rect)
 		this.DrawOutlineMode(rect, width, isCircle, outlinedColor)
 		this.DrawArc(rect, width, isGather ? -ratio : ratio, isCircle)
 		this.DrawTimer(remaining, rect, isActive)
 	}
 	public DrawOnMinimap(
-		position: Vector3,
+		origin: Vector3,
 		index: number,
 		isGather: boolean,
 		isActive: boolean,
 		gatherStartTime: number,
 		gatherColor: Color
 	) {
-		const color = isActive ? Color.White : Color.Red
-		MinimapSDK.DrawIcon("rune_xp", position, 350, color, 0, `rune_xp_active_${index}`)
-
+		MinimapSDK.DrawIcon(
+			"rune_xp",
+			origin,
+			350,
+			isActive ? Color.White : Color.Red,
+			0,
+			this.getMinimapKey(index)
+		)
 		if (isGather) {
-			this.DrawWavesOnMinimap(gatherStartTime, position, gatherColor)
+			this.DrawWavesOnMinimap(gatherStartTime, origin, gatherColor)
 		}
 	}
 	public Destroy(index: number) {
-		MinimapSDK.DeleteIcon(`rune_xp_active_${index}`)
+		MinimapSDK.DeleteIcon(this.getMinimapKey(index))
 	}
 	protected DrawWavesOnMinimap(
 		startTime: number,
 		position: Vector3,
 		color: Color
 	): void {
-		const baseWaveSize = 20
-		const elapsed = GameState.RawGameTime - startTime + 1.5
-		const center = MinimapSDK.WorldToMinimap(position)
-
-		const waveCount = 2
-		const waveDelay = 0.5 // delay between waves (in sec)
-
+		const waveCount = 2,
+			waveDelay = 0.5, // delay between waves (in sec)
+			baseWaveSize = 20,
+			elapsed = GameState.RawGameTime - startTime + 1.5,
+			center = MinimapSDK.WorldToMinimap(position)
 		for (let i = 0; i < waveCount; i++) {
 			const waveElapsed = elapsed - i * waveDelay
 			if (waveElapsed < 0) {
@@ -92,11 +89,11 @@ export class GUI {
 			const waveSize = new Vector2(baseWaveSize, baseWaveSize).MultiplyScalar(
 				1 + progress * 2
 			)
-			const width = this.getWidth(progress) * 1.25
-			const waveColor = color.Clone()
-			waveColor.a *= (1 - progress) * 0.8
+			const newCol = color.Clone()
+			newCol.a *= (1 - progress) * 0.8
+			const width = this.getWidthProgress(progress) * 1.25
 			const wavePos = center.Subtract(waveSize.DivideScalar(2))
-			RendererSDK.OutlinedCircle(wavePos, waveSize, waveColor, width)
+			RendererSDK.OutlinedCircle(wavePos, waveSize, newCol, width)
 		}
 	}
 	protected DrawIconWorld(position: Rectangle) {
@@ -106,6 +103,9 @@ export class GUI {
 			-1,
 			position.Size
 		)
+	}
+	protected DrawBackground(position: Rectangle, isCircle: boolean) {
+		RendererSDK.Image(GUI.background, position.pos1, isCircle ? 0 : -1, position.Size)
 	}
 	protected DrawTimer(
 		remainingTime: number,
@@ -173,14 +173,11 @@ export class GUI {
 			color
 		)
 	}
-	protected GetPosition(w2s: Vector2): Rectangle {
-		const menuSize = this.iconSize
+	protected GetPosition(w2s: Vector2, menu: MenuManager): Rectangle {
+		const menuSize = menu.IconSize.value + 44
 		const size = GUIInfo.ScaleVector(menuSize, menuSize)
 		const pos = w2s.Subtract(size.DivideScalar(2))
 		return new Rectangle(pos, pos.Add(size))
-	}
-	private getWidth(progress: number) {
-		return 5 * (1 - progress)
 	}
 	private isHUDContains(position: Vector2) {
 		return (
@@ -188,5 +185,11 @@ export class GUI {
 			GUIInfo.ContainsMiniMap(position) ||
 			GUIInfo.ContainsScoreboard(position)
 		)
+	}
+	private getWidthProgress(progress: number) {
+		return 5 * (1 - progress)
+	}
+	private getMinimapKey(index: number) {
+		return `rune_xp_active_${index}`
 	}
 }

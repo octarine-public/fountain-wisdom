@@ -40,9 +40,12 @@ export class FountainModel {
 		if (this.isActive) {
 			return 0
 		}
-		const gameTime = GameRules?.GameTime ?? GameState.RawGameTime
 		return this.floorTime(
-			Math.max(this.maxDuration - (gameTime % this.maxDuration), 0)
+			Math.max(
+				this.maxDuration -
+					((GameRules?.GameTime ?? GameState.RawGameTime) % this.maxDuration),
+				0
+			)
 		)
 	}
 	public Draw() {
@@ -51,7 +54,8 @@ export class FountainModel {
 			this.isGather,
 			this.isActive,
 			this.Remaining,
-			this.maxDuration
+			this.maxDuration,
+			this.menu
 		)
 		this.gui.DrawOnMinimap(
 			this.Entity.Position,
@@ -72,14 +76,14 @@ export class FountainModel {
 		const rawTime = GameState.RawGameTime
 		if (this.isEndcap(particle.PathNoEcon)) {
 			this.isActive = false
-			this.pickupRemaining = 0
 			this.lastGatherTime = 0
+			this.pickupRemaining = 0
 			return
 		}
 		const radius = particle.ControlPoints.get(1)
 		if (radius === undefined) {
-			this.pickupRemaining = 0
 			this.lastGatherTime = 0
+			this.pickupRemaining = 0
 			return
 		}
 		const tick = GameState.TickInterval
