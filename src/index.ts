@@ -25,6 +25,7 @@ new (class CFountainWisdom {
 		}
 		this.menu = new MenuManager()
 		EventsSDK.on("Draw", this.Draw.bind(this))
+		EventsSDK.on("GameEnded", this.GameEnded.bind(this))
 		EventsSDK.on("PostDataUpdate", this.PostDataUpdate.bind(this))
 
 		EventsSDK.on("EntityCreated", this.EntityCreated.bind(this))
@@ -48,6 +49,9 @@ new (class CFountainWisdom {
 	}
 	private get shouldDraw() {
 		return this.menu.State.value && this.isUIGame && !this.isPostGame
+	}
+	protected GameEnded() {
+		FountainModel.Sleeper.ResetTimer()
 	}
 	protected Draw() {
 		if (!this.shouldDraw) {

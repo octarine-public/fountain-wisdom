@@ -15,6 +15,14 @@ import { GUI } from "./gui"
 import { MenuManager } from "./menu"
 
 export class FountainModel {
+	public static readonly Sleeper = new TickSleeper()
+	private static soundEmit(ms: number) {
+		if (!this.Sleeper.Sleeping) {
+			SoundSDK.EmitStartSoundEvent("General.Ping")
+			this.Sleeper.Sleep(ms)
+		}
+	}
+
 	private isActive = false
 	private pickupRemaining = 0
 	private lastGatherTime = 0
@@ -132,8 +140,8 @@ export class FountainModel {
 		const delay = 7,
 			rawTime = GameState.RawGameTime
 		MinimapSDK.DrawPing(this.Entity.Position, Color.White, rawTime + delay)
-		SoundSDK.EmitStartSoundEvent("General.Ping")
 		this.sleeper.Sleep(delay * 1000)
+		FountainModel.soundEmit(delay * 1000)
 	}
 	private floorTime(value: number) {
 		return Math.floor(value * 10) / 10
