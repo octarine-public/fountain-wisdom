@@ -9,6 +9,7 @@ import {
 	GameState,
 	Modifier,
 	NetworkedParticle,
+	RendererSDK,
 	XPFountain
 } from "github.com/octarine-public/wrapper/index"
 
@@ -24,9 +25,14 @@ new (class CFountainWisdom {
 			return
 		}
 		this.menu = new MenuManager()
+		EventsSDK.on("Draw2D", this.Draw2D.bind(this))
 		EventsSDK.on("Draw", this.Draw.bind(this))
 		EventsSDK.on("GameEnded", this.GameEnded.bind(this))
 		EventsSDK.on("PostDataUpdate", this.PostDataUpdate.bind(this))
+
+		this.menu.State.OnValue(() => RendererSDK.InvalidateDraw2D())
+		this.menu.IconSize.OnValue(() => RendererSDK.InvalidateDraw2D())
+		this.menu.ModeImage.OnValue(() => RendererSDK.InvalidateDraw2D())
 
 		EventsSDK.on("EntityCreated", this.EntityCreated.bind(this))
 		EventsSDK.on("EntityDestroyed", this.EntityDestroyed.bind(this))
@@ -58,7 +64,15 @@ new (class CFountainWisdom {
 			return
 		}
 		for (let i = this.entities.length - 1; i > -1; i--) {
-			this.entities[i].Draw()
+			this.entities[i].DrawWaves()
+		}
+	}
+	protected Draw2D() {
+		if (!this.shouldDraw) {
+			return
+		}
+		for (let i = this.entities.length - 1; i > -1; i--) {
+			this.entities[i].Draw2D()
 		}
 	}
 	protected PostDataUpdate(dt: number) {

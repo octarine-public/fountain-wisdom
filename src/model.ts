@@ -6,6 +6,7 @@ import {
 	MinimapSDK,
 	Modifier,
 	NetworkedParticle,
+	RendererSDK,
 	SoundSDK,
 	TickSleeper,
 	XPFountain
@@ -56,20 +57,21 @@ export class FountainModel {
 			)
 		)
 	}
-	public Draw() {
+	public Draw2D() {
 		this.gui.DrawWorld(
-			this.Entity.Position,
+			this.Entity,
 			this.isGather,
 			this.isActive,
 			this.Remaining,
 			this.maxDuration,
 			this.menu
 		)
-		this.gui.DrawOnMinimap(
+		this.gui.DrawOnMinimap(this.Entity.Position, this.Entity.Index, this.isActive)
+	}
+	public DrawWaves() {
+		this.gui.DrawWaves(
 			this.Entity.Position,
-			this.Entity.Index,
 			this.isGather,
-			this.isActive,
 			this.lastGatherTime,
 			Color.Aqua
 		)
@@ -77,6 +79,9 @@ export class FountainModel {
 	public PostDataUpdate() {
 		if (!this.isActive) {
 			this.isActive = this.Remaining <= 0
+			if (this.isActive) {
+				RendererSDK.InvalidateDraw2D()
+			}
 			this.pingMinimap()
 		}
 	}
@@ -86,12 +91,14 @@ export class FountainModel {
 			this.isActive = false
 			this.lastGatherTime = 0
 			this.pickupRemaining = 0
+			RendererSDK.InvalidateDraw2D()
 			return
 		}
 		const radius = particle.ControlPoints.get(1)
 		if (radius === undefined) {
 			this.lastGatherTime = 0
 			this.pickupRemaining = 0
+			RendererSDK.InvalidateDraw2D()
 			return
 		}
 		const tick = GameState.TickInterval
@@ -101,6 +108,7 @@ export class FountainModel {
 		this.pickupRemaining = Math.ceil(remainingTime / tick) * tick
 		if (this.lastGatherTime < rawTime) {
 			this.lastGatherTime = rawTime + 1.5
+			RendererSDK.InvalidateDraw2D()
 		}
 	}
 	public ParticleDestroyed(particle: NetworkedParticle) {
@@ -110,9 +118,11 @@ export class FountainModel {
 	}
 	public ModifierCreated(modifier: Modifier) {
 		this.setFlagsByModifier(modifier)
+		RendererSDK.InvalidateDraw2D()
 	}
 	public ModifierChanged(modifier: Modifier) {
 		this.setFlagsByModifier(modifier)
+		RendererSDK.InvalidateDraw2D()
 	}
 	public Destroy() {
 		this.isActive = false

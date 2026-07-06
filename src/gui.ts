@@ -8,24 +8,30 @@ import {
 	Rectangle,
 	RendererSDK,
 	Vector2,
-	Vector3
+	Vector3,
+	XPFountain
 } from "github.com/octarine-public/wrapper/index"
 
 import { MenuManager } from "./menu"
+
+const XP_FOUNTAIN_KIND = RendererSDK.AllocateAnchorKind()
 
 export class GUI {
 	private static readonly basePath = "github.com/octarine-public/fountain-wisdom"
 	private static readonly background =
 		this.basePath + "/scripts_files/images/background.png"
 
+	private static readonly drawAnchor = new Vector2()
+
 	public DrawWorld(
-		origin: Vector3,
+		entity: XPFountain,
 		isGather: boolean,
 		isActive: boolean,
 		remaining: number,
 		maxRespawnTime: number,
 		menu: MenuManager
 	) {
+		let origin = entity.Position
 		if (isActive) {
 			origin = origin.Clone().AddScalarZ(300)
 		}
@@ -33,25 +39,35 @@ export class GUI {
 		if (w2s === undefined || this.isHUDContains(w2s)) {
 			return
 		}
-		const rect = this.GetPosition(w2s, menu),
+		const rect = this.GetPosition(GUI.drawAnchor, menu),
 			isCircle = menu.ModeImage.SelectedID === 0,
 			ratio = Math.max(100 * (remaining / maxRespawnTime), 0),
 			width = Math.round(GUIInfo.ScaleHeight(2) + Math.round(rect.Height / 15)),
 			outlinedColor = isActive && remaining === 0 ? Color.Green : Color.Black
-		this.DrawBackground(rect, isCircle)
-		this.DrawIconWorld(rect)
-		this.DrawOutlineMode(rect, width, isCircle, outlinedColor)
-		this.DrawArc(rect, width, isGather ? -ratio : ratio, isCircle)
-		this.DrawTimer(remaining, rect)
+		RendererSDK.DrawEntityRelative(
+			entity.Index,
+			XP_FOUNTAIN_KIND,
+			() => {
+				const pos = entity.Position.Clone()
+				if (isActive) {
+					pos.AddScalarZ(300)
+				}
+				const screen = RendererSDK.WorldToScreen(pos)
+				if (screen === undefined || this.isHUDContains(screen)) {
+					return undefined
+				}
+				return screen
+			},
+			() => {
+				this.DrawBackground(rect, isCircle)
+				this.DrawIconWorld(rect)
+				this.DrawOutlineMode(rect, width, isCircle, outlinedColor)
+				this.DrawArc(rect, width, isGather ? -ratio : ratio, isCircle)
+				this.DrawTimer(remaining, rect)
+			}
+		)
 	}
-	public DrawOnMinimap(
-		origin: Vector3,
-		index: number,
-		isGather: boolean,
-		isActive: boolean,
-		gatherStartTime: number,
-		gatherColor: Color
-	) {
+	public DrawOnMinimap(origin: Vector3, index: number, isActive: boolean) {
 		MinimapSDK.DrawIcon(
 			"rune_xp",
 			origin,
@@ -60,6 +76,13 @@ export class GUI {
 			0,
 			this.getMinimapKey(index)
 		)
+	}
+	public DrawWaves(
+		origin: Vector3,
+		isGather: boolean,
+		gatherStartTime: number,
+		gatherColor: Color
+	) {
 		if (isGather) {
 			this.DrawWavesOnMinimap(gatherStartTime, origin, gatherColor)
 		}
