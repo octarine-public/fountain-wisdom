@@ -1,17 +1,5 @@
 import "./translations"
 
-import {
-	DOTAGameState,
-	DOTAGameUIState,
-	Entity,
-	EventsSDK,
-	GameRules,
-	GameState,
-	Modifier,
-	NetworkedParticle,
-	XPFountain
-} from "github.com/octarine-public/wrapper/index"
-
 import { MenuManager } from "./menu"
 import { FountainModel } from "./model"
 
@@ -43,8 +31,8 @@ new (class CFountainWisdom {
 	}
 	private get isPostGame() {
 		return (
-			GameRules === undefined ||
-			GameRules.GameState === DOTAGameState.DOTA_GAMERULES_STATE_POST_GAME
+			Dota2SDK.GameRules === undefined ||
+			Dota2SDK.GameRules.GameState === DOTAGameState.DOTA_GAMERULES_STATE_POST_GAME
 		)
 	}
 	private get shouldDraw() {
@@ -84,7 +72,7 @@ new (class CFountainWisdom {
 			return
 		}
 		this.entities
-			.find(x => x.Entity === particle.AttachedTo)
+			.find(x => x.Entity === particle.Attached)
 			?.ParticleUpdated(particle)
 	}
 	protected ParticleDestroyed(particle: NetworkedParticle) {
@@ -92,7 +80,7 @@ new (class CFountainWisdom {
 			return
 		}
 		this.entities
-			.find(x => x.Entity === particle.AttachedTo)
+			.find(x => x.Entity === particle.Attached)
 			?.ParticleDestroyed(particle)
 	}
 	protected ModifierCreated(modifier: Modifier) {

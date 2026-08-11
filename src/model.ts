@@ -1,15 +1,3 @@
-import {
-	Color,
-	GameData,
-	GameRules,
-	GameState,
-	MinimapSDK,
-	Modifier,
-	NetworkedParticle,
-	SoundSDK,
-	TickSleeper,
-	XPFountain
-} from "github.com/octarine-public/wrapper/index"
 
 import { GUI } from "./gui"
 import { MenuManager } from "./menu"
@@ -51,7 +39,7 @@ export class FountainModel {
 		return this.floorTime(
 			Math.max(
 				this.maxDuration -
-					((GameRules?.GameTime ?? GameState.RawGameTime) % this.maxDuration),
+					((Dota2SDK.GameRules?.GameTime ?? GameState.RawGameTime) % this.maxDuration),
 				0
 			)
 		)

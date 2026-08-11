@@ -1,4 +1,3 @@
-import { Menu, PathData } from "github.com/octarine-public/wrapper/index"
 
 export class MenuManager {
 	public static Menu: MenuManager

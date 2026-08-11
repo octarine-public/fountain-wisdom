@@ -1,15 +1,3 @@
-import {
-	Color,
-	GameState,
-	GUIInfo,
-	MathSDK,
-	MinimapSDK,
-	PathData,
-	Rectangle,
-	RendererSDK,
-	Vector2,
-	Vector3
-} from "github.com/octarine-public/wrapper/index"
 
 import { MenuManager } from "./menu"
 
@@ -113,7 +101,7 @@ export class GUI {
 		}
 		const text =
 			remainingTime > 60
-				? MathSDK.FormatTime(remainingTime)
+				? Math.formatTime(remainingTime)
 				: remainingTime.toFixed(remainingTime < 2 ? 1 : 0)
 		RendererSDK.TextByFlags(text, rect, Color.White, 3)
 	}
