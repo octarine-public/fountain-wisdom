@@ -1,1 +1,13 @@
-{}
+{
+	"State": "启用",
+	"Fountain of wisdom": "智慧神符祭坛",
+	"Timers of the wisdom fountains,\nover the shrine and on the minimap": "智慧神符祭坛的计时器，\n显示在祭坛上方和小地图上",
+	"Minimap alert": "小地图提醒",
+	"Pings the minimap and plays a sound\n20 seconds before the fountain spawns": "在祭坛刷新前 20 秒\n于小地图发出信号并播放提示音",
+	"Icon size": "图标大小",
+	"Size of the icon drawn over the shrine": "祭坛上方图标的大小",
+	"Icon shape": "图标形状",
+	"Shape of the icon and of the timer ring around it": "图标及其外圈计时器的形状",
+	"Circle": "圆形",
+	"Square": "方形"
+}
