@@ -71,9 +71,7 @@ new (class CFountainWisdom {
 		if (!this.isValidPath(particle.PathNoEcon)) {
 			return
 		}
-		this.entities
-			.find(x => x.Entity === particle.Attached)
-			?.ParticleUpdated(particle)
+		this.entities.find(x => x.Entity === particle.Attached)?.ParticleUpdated(particle)
 	}
 	protected ParticleDestroyed(particle: NetworkedParticle) {
 		if (!this.isValidPath(particle.PathNoEcon)) {

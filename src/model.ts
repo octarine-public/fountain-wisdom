@@ -1,4 +1,3 @@
-
 import { GUI } from "./gui"
 import { MenuManager } from "./menu"
 
@@ -39,7 +38,8 @@ export class FountainModel {
 		return this.floorTime(
 			Math.max(
 				this.maxDuration -
-					((Dota2SDK.GameRules?.GameTime ?? GameState.RawGameTime) % this.maxDuration),
+					((Dota2SDK.GameRules?.GameTime ?? GameState.RawGameTime) %
+						this.maxDuration),
 				0
 			)
 		)
