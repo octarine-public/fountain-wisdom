@@ -1,10 +1,13 @@
 {
 	"State": "Состояние",
 	"Fountain of wisdom": "Алтарь мудрости",
+	"Timers of the wisdom fountains,\nover the shrine and on the minimap": "Таймеры алтарей мудрости\nнад алтарём и на мини-карте",
+	"Minimap alert": "Оповещение на мини-карте",
+	"Pings the minimap and plays a sound\n20 seconds before the fountain spawns": "Пинг на мини-карте и звук\nза 20 секунд до появления",
 	"Icon size": "Размер иконки",
-	"Mode images": "Режимы изображений",
+	"Size of the icon drawn over the shrine": "Размер иконки над алтарём",
+	"Icon shape": "Форма иконки",
+	"Shape of the icon and of the timer ring around it": "Форма иконки и таймера вокруг неё",
 	"Circle": "Круг",
-	"Square": "Квадрат",
-	"Notify on minimap": "Оповещать на мини-карте",
-	"Notify in advance\n20 seconds on minimap": "Оповещать предварительно\nза 20 секунд на мини-карте (пинг)"
+	"Square": "Квадрат"
 }

@@ -1,10 +1,9 @@
 import { canvas } from "../render"
 import { MenuManager } from "./menu"
+import { Paths } from "./paths"
 
 export class GUI {
-	private static readonly basePath = "github.com/octarine-public/fountain-wisdom"
-	private static readonly background =
-		this.basePath + "/scripts_files/images/background.png"
+	private static readonly background = `${Paths.Images}/background.png`
 
 	public DrawWorld(
 		origin: Vector3,
