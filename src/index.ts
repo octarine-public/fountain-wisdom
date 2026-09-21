@@ -1,5 +1,6 @@
 import "./translations"
 
+import { GUI } from "./gui"
 import { MenuManager } from "./menu"
 import { FountainModel } from "./model"
 
@@ -39,12 +40,13 @@ new (class CFountainWisdom {
 		return this.menu.State.value && this.isUIGame && !this.isPostGame
 	}
 	protected GameEnded() {
-		FountainModel.Sleeper.ResetTimer()
+		FountainModel.GameEnded()
 	}
 	protected Draw() {
 		if (!this.shouldDraw) {
 			return
 		}
+		GUI.BeginFrame()
 		for (let i = this.entities.length - 1; i > -1; i--) {
 			this.entities[i].Draw()
 		}

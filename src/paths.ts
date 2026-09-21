@@ -5,6 +5,5 @@ const files = `${base}/scripts_files`
 export const Paths = {
 	Base: base,
 	Files: files,
-	Images: `${files}/images`,
 	Icons: `${files}/menu/icons`
 } as const
