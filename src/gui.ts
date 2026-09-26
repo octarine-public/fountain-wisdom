@@ -220,6 +220,9 @@ export class GUI {
 			baseWaveSize = 20,
 			elapsed = GameState.RawGameTime - startTime + 1.5,
 			center = MinimapSDK.WorldToMinimap(position)
+		if (center === undefined) {
+			return
+		}
 		for (let i = 0; i < waveCount; i++) {
 			const waveElapsed = elapsed - i * waveDelay
 			if (waveElapsed < 0) {
