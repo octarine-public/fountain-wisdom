@@ -16,14 +16,17 @@
 	"Anti-spam": "防刷屏",
 	"How long after a gather alert the same\nshrine stays quiet, in seconds": "拾取提醒后同一祭坛\n静默的秒数",
 	"Spawns in {n} seconds": "{n} 秒后刷新",
-	"Someone is taking the rune on the Radiant side": "有人正在拾取天辉一侧的神符",
-	"Someone is taking the rune on the Dire side": "有人正在拾取夜魇一侧的神符",
-	"Taking the wisdom rune on the Radiant side": "正在拾取天辉一侧的智慧神符",
-	"Taking the wisdom rune on the Dire side": "正在拾取夜魇一侧的智慧神符",
+	"Someone is taking · Radiant": "有人在拾取 · 天辉",
+	"Someone is taking · Dire": "有人在拾取 · 夜魇",
+	"Taking the rune · Radiant": "正在拾取神符 · 天辉",
+	"Taking the rune · Dire": "正在拾取神符 · 夜魇",
 	"Minimap alert": "小地图提醒",
 	"Also pings the minimap and plays\na sound with every alert": "每次通知时同时在小地图\n发出信号并播放提示音",
 	"Format time": "时间格式",
 	"Show remaining\ntime as min:sec": "以 分:秒 格式\n显示剩余时间",
 	"Size in world": "世界中的大小",
-	"Size of the icon drawn over the shrine": "祭坛上方图标的大小"
+	"Size of the icon drawn over the shrine": "祭坛上方图标的大小",
+	"Notification type": "通知类型",
+	"As in settings": "跟随设置",
+	"Where to notify: as picked in Settings,\nthe game chat or a side card": "通知显示位置：跟随设置、\n游戏聊天或侧边卡片"
 }

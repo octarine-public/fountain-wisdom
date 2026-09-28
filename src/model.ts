@@ -28,12 +28,12 @@ function sideOf(shrine: XPFountain): "Radiant" | "Dire" {
 }
 /** The lines of a gather alert, naming the side of the shrine: by someone, and by a hero. */
 const SOMEONE_TAKING = {
-	Radiant: "Someone is taking the rune on the Radiant side",
-	Dire: "Someone is taking the rune on the Dire side"
+	Radiant: "Someone is taking · Radiant",
+	Dire: "Someone is taking · Dire"
 } as const
 const HERO_TAKING = {
-	Radiant: "Taking the wisdom rune on the Radiant side",
-	Dire: "Taking the wisdom rune on the Dire side"
+	Radiant: "Taking the rune · Radiant",
+	Dire: "Taking the rune · Dire"
 } as const
 
 export class FountainModel {
@@ -230,15 +230,19 @@ export class FountainModel {
 	 * The alerts of a rune being taken: the notice on its channel, naming the hero when one is
 	 * in sight over the shrine, and the ping on the minimap. Held back for the anti-spam window
 	 * after the last one, so a channel broken off and started again does not tell of itself
-	 * twice.
+	 * twice. A rune taken by the local hero or an ally is no news, so it tells of nothing.
 	 */
 	private gatherAlert() {
 		const menu = this.menu
 		if (!menu.State.value || !menu.GatherAlert.value || this.quiet.Sleeping) {
 			return
 		}
+		const hero = this.gatherer()
+		if (hero !== undefined && !hero.IsEnemy()) {
+			return
+		}
 		this.quiet.Sleep(menu.AntiSpam.value * 1000)
-		this.notifyGather(this.gatherer())
+		this.notifyGather(hero)
 		// a ping of the coming rune does not hold this one back: the rune is going right now
 		this.sleeper.ResetTimer()
 		if (this.pingMinimap(StateTint(FountainState.Gathering))) {
@@ -298,22 +302,33 @@ export class FountainModel {
 			channel
 		})
 	}
-	/** The hero in sight channelling over the shrine, which is who is taking the rune, if any. */
+	/**
+	 * The hero in sight channelling over the shrine, which is who is taking the rune, if any. The
+	 * particle of the channel can land a tick before the hero's channel does, so when no one is
+	 * channelling yet it is the nearest hero in sight at the shrine.
+	 */
 	private gatherer(): Nullable<Hero> {
 		const heroes = EntityManager.GetEntitiesByClass(Hero)
+		let nearest: Nullable<Hero>,
+			nearestDist = GATHER_RANGE
 		for (let i = heroes.length - 1; i > -1; i--) {
 			const hero = heroes[i]
-			if (
-				hero.IsVisible &&
-				hero.IsAlive &&
-				!hero.IsIllusion &&
-				hero.IsChanneling &&
-				hero.Distance2D(this.Entity) <= GATHER_RANGE
-			) {
+			if (!hero.IsVisible || !hero.IsAlive || hero.IsIllusion) {
+				continue
+			}
+			const dist = hero.Distance2D(this.Entity)
+			if (dist > GATHER_RANGE) {
+				continue
+			}
+			if (hero.IsChanneling) {
 				return hero
 			}
+			if (dist <= nearestDist) {
+				nearest = hero
+				nearestDist = dist
+			}
 		}
-		return undefined
+		return nearest
 	}
 	private floorTime(value: number) {
 		return Math.floor(value * 10) / 10
