@@ -1,4 +1,5 @@
 import { FountainIcons } from "./icons"
+import { AddMapObjectsPage } from "./map-objects"
 
 export class MenuManager {
 	public static Menu: MenuManager
@@ -18,8 +19,7 @@ export class MenuManager {
 	public readonly FormatTime: Menu.Toggle
 	public readonly Size: Menu.Slider
 
-	private readonly tree = Menu.AddEntry("Visual")
-	private readonly node = this.tree.AddNode(
+	private readonly node = AddMapObjectsPage(
 		"Fountain of wisdom",
 		FountainIcons.Fountain,
 		"Timers of the wisdom fountains,\nover the shrine and on the minimap"
